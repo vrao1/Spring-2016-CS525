@@ -1,0 +1,714 @@
+Personnel Information :
+=========================
+ 
+Names: Vinod Rao
+   	Joshua D. LarBorde
+CWID : A20369838
+   	A20301009
+*************************
+ 
+File list :
+=========================
+ Without Extra Testing in directory “main”:
+*************************
+ dberror.c
+ dberror.h
+ Makefile
+ storage_mgr.c 
+ storage_mgr.h 
+ test_assign1_1.c 
+ test_helper.h
+*************************
+ With Extra Testing in directory “additional”:
+*************************
+ dberror.c
+ dberror.h
+ Makefile
+ storage_mgr.c 
+ storage_mgr.h 
+ test_assign1_2.c 
+ test_helper.h
+*************************
+Milestone :
+=========================
+Storage Manager has been created 
+ 
+*************************
+ 
+Installation instruction :
+=========================
+ 
+unzip cs525_assign1_vrao1.zip
+ 
+cd cs525_assign1_vrao1/main
+make clean
+make
+./test_assign1
+
+For Extra Test Cases :
+************************
+cd ../additional
+make clean
+make
+./test_assign1_2
+ 
+*************************
+ 
+Function descriptions :
+=========================
+/*******************************************************************************
+ * Function Name: initStorageManager
+ *
+ * Description: Initializes the Head pointer of doubly link list arrOfFiles to NULL
+ *
+ *
+ * Patameters:
+ *      void
+ *
+ * Return: RC - Return Code
+ *      void
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: copyFileHandle
+ *
+ * Description: Copies values from source to destination File Handle pointers
+ *
+ * Patameters:
+ *      SM_FileHandle *destFHandle - Destination File Handle address
+ *      SM_FileHandle *srcFHandle - Source File Handle address
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It copies all member variables from source to destination object
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-10      Vinod Rao <vrao1@hawk.iit.edu>          Newly Written Function
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: createPageFile
+ *
+ * Description: Create a page file with initial size of 1
+ *      page filled with all '\0' bytes.
+ *
+ * Patameters:
+ *      char *fileName - Name of file to create.
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_WRITE_FAILED
+ *      RC_DYNAMIC_MEM_ALLOC_FAILED
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_NULL_ARGUMENT
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * Main Logic:
+ *      It calls "creat" system call to create new file
+ *      It also initializes first PAGE_SIZE bytes all to '\0'
+ *      It appends newly created File Handle node to the last position of
+ *      a linked list "arrOfFiles"
+ *
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: createPageFile
+ *
+ * Description: Create a page file with initial size of 1
+ *      page filled with all '\0' bytes.
+ *
+ * Patameters:
+ *      char *fileName - Name of file to create.
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_WRITE_FAILED
+ *      RC_DYNAMIC_MEM_ALLOC_FAILED
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_NULL_ARGUMENT
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * Main Logic:
+ *      It calls "creat" system call to create new file
+ *      It also initializes first PAGE_SIZE bytes all to '\0'
+ *      It appends newly created File Handle node to the last position of
+ *      a linked list "arrOfFiles"
+ *
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: closePageFile
+ *
+ * Description: Close an open page file.
+ *
+ * Patameters:
+ *      SM_FileHandle *fHandle - Handle of file to close
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_UNOPENED_FILE
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It calls "close" system call to close file
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: destroyPageFile
+ *
+ * Description: Delete an existing page file.
+ *
+ * Patameters:
+ *      char *fileName - Name of file to open
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_FILE_DESTROY_FAILED
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It calls "unlink" system call to destroy the file
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: readBlock
+ *
+ * Description: Reads a block from a file and stores it in memory.
+ *
+ * Patameters:
+ *      int pageNum - Which block to read from a file
+ *      SM_FileHandle *fHandle - Handle of file to read from
+ *      SM_PageHandle *memPage - Handle of memory to store read data in
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_FILE_DESCRIPTOR_INIT_FAILED
+ *      RC_FILE_READ_FAILED
+ *      RC_UNOPENED_FILE
+ *      RC_INVALID_PAGE_NUM
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It calls "read" system call to read particular block of the file
+ *      into the given buffer memory
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: getBlockPosition
+ *
+ * Description: Gets the current page position in a file.
+ *
+ * Patameters:
+ *      SM_FileHandle *fHandle - Handle of file to get the current page positions of
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It returns Current Page Position from the correct File Handle
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: readFirstBlock
+ *
+ * Description: Reads the first block of a file.
+ *
+ * Patameters:
+ *      SM_FileHandle *fHandle - Handle of file to read the data from
+ *      SM_PageHandle memPage - Handle of memory to store read data in
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_FILE_DESCRIPTOR_INIT_FAILED
+ *      RC_FILE_READ_FAILED
+ *      RC_UNOPENED_FILE
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It re-points file pointer to first block location
+ *      and read that block into the given buffer memory, current page position is readjusted accordingly in the given function body
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: readPreviousBlock
+ *
+ * Description: Reads the first block of a file.
+ *
+ * Patameters:
+ *      SM_FileHandle *fHandle - Handle of file to read the data from
+ *      SM_PageHandle memPage - Handle of memory to store read data in
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_FILE_DESCRIPTOR_INIT_FAILED
+ *      RC_NO_PREVIOUS_BLOCK
+ *      RC_FILE_READ_FAILED
+ *      RC_UNOPENED_FILE
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It re-points file pointer to first block location
+ *      and read that block into the given buffer memory, current page position is readjusted accordingly in the given function body
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: readCurrentBlock
+ *
+ * Description: Reads the block of a file based on the current page position.
+ *
+ * Patameters:
+ *      SM_FileHandle *fHandle - Handle of file to read the data from
+ *      SM_PageHandle memPage - Handle of memory to store read data in
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_FILE_DESCRIPTOR_INIT_FAILED
+ *      RC_FILE_READ_FAILED
+ *      RC_UNOPENED_FILE
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It reads current block into the given buffer memory,
+ *      current page position is readjusted accordingly in the given function body
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: readNextBlock
+ *
+ * Description: Reads the next block of a file.
+ *
+ * Patameters:
+ *      SM_FileHandle *fHandle - Handle of file to read the data from
+ *      SM_PageHandle memPage - Handle of memory to store read data in
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_FILE_DESCRIPTOR_INIT_FAILED
+ *      RC_FILE_READ_FAILED
+ *      RC_NO_NEXT_BLOCK
+ *      RC_UNOPENED_FILE
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It reads next block into the given buffer memory,
+ *      current page position is readjusted accordingly in the given function body
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: readLastBlock
+ *
+ * Description: Reads the last block of a file.
+ *
+ * Patameters:
+ *      SM_FileHandle *fHandle - Handle of file to read the data from
+ *      SM_PageHandle memPage - Handle of memory to store read data in
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_FILE_DESCRIPTOR_INIT_FAILED
+ *      RC_FILE_READ_FAILED
+ *      RC_UNOPENED_FILE
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It reads last block into the given buffer memory,
+ *      current page position is readjusted accordingly in the given function body
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: writeBlock
+ *
+ * Description: Writes a page to disk.
+ *
+ * Patameters:
+ *      int pageNum - Which page to write to
+ *      SM_FileHandle *fHandle - Handle of file to write the data to
+ *      SM_PageHandle memPage - Handle of memory containing data to write
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_FILE_DESCRIPTOR_INIT_FAILED
+ *      RC_WRITE_FAILED
+ *      RC_UNOPENED_FILE
+ *      RC_INVALID_PAGE_NUM
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It writes block into the file,
+ *      current page position is readjusted accordingly in the given function body
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: writeCurrentBlock
+ *
+ * Description: Writes Current page to disk.
+ *
+ * Patameters:
+ *      SM_FileHandle *fHandle - Handle of file to write the data to
+ *      SM_PageHandle memPage - Handle of memory containing data to write
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_FILE_DESCRIPTOR_INIT_FAILED
+ *      RC_WRITE_FAILED
+ *      RC_UNOPENED_FILE
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It writes current block into the file
+ *      current page position is readjusted accordingly in the given function body
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: appendEmptyBlock
+ *
+ * Description: Adds an additional page to the file.
+ *
+ * Patameters:
+ *      SM_FileHandle *fHandle - Handle of file to append the page to
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_FILE_DESCRIPTOR_INIT_FAILED
+ *      RC_WRITE_FAILED
+ *      RC_UNOPENED_FILE
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It appends empty block into last position of the file
+ *      current page position is readjusted accordingly in the given function body
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+/*******************************************************************************
+ * Function Name: ensureCapacity
+ *
+ * Description: Checks and ensures that a file has a certain number of pages.
+ *
+ * Patameters:
+ *      int numberOfPages - The number of pages to check and ensure the file has
+ *      SM_FileHandle *fHandle - Handle of file to check and possibly grow
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_FILE_NOT_FOUND
+ *      RC_FILE_HANDLE_NOT_INIT
+ *      RC_TOTAL_PAGE_CAPACITY_EXCEEDED
+ *      RC_NULL_ARGUMENT
+ *
+ * Main Logic:
+ *      It checks for the existence of certain number of pages
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-01      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-02-07      Vinod Rao <vrao1@hawk.iit.edu>          Updates after review
+ *      2016-02-10      Joshua LaBorde <jlaborde@iit.edu>       Updates while testing
+ *
+*******************************************************************************/
+
+
+ 
+*************************
+ 
+Additional error codes :
+=========================
+ 
+#define RC_NULL_ARGUMENT 400
+#define RC_DYNAMIC_MEM_ALLOC_FAILED 401
+#define RC_FILE_OPEN_FAILED 402
+#define RC_UNOPENED_FILE 403
+#define RC_FILE_DESTROY_FAILED 404
+#define RC_NO_CURRENT_BLOCK 405
+#define RC_FILE_DESCRIPTOR_INIT_FAILED 406
+#define RC_FILE_READ_FAILED 407
+#define RC_INVALID_PAGE_NUM 408
+#define RC_NO_PREVIOUS_BLOCK 409
+#define RC_NO_NEXT_BLOCK 410
+#define RC_TOTAL_PAGE_CAPACITY_EXCEEDED 411
+
+ 
+*************************
+ 
+Data structure :
+=========================
+ 
+//Structure to store file pointer and descriptor
+struct _mgmtInfo{
+        int fd;
+        FILE *ptr;
+};
+
+//Structure contains the current context of each file being maintained by Storage Manager
+struct _SM_FileHandle {
+  char *fileName;
+  int totalNumPages;
+  int curPagePos;
+  struct _mgmtInfo mgmtInfo;
+};
+
+typedef struct _SM_FileHandle SM_FileHandle;
+typedef char* SM_PageHandle;
+
+// A node of doubly link list consists of an object SM_FileHandle and two pointers to the same data type
+struct _allFiles{
+        SM_FileHandle fh;
+        struct _allFiles *next;
+        struct _allFiles *prev;
+};
+
+typedef struct _allFiles allFiles;
+
+allFiles *arrOfFiles; // Doubly Link List head pointer
+
+Each node contains an object of SM_FileHandle data type and two pointers to next & previous node for each one.
+ 
+*************************
+ 
+Extra credit:
+=========================
+Valgrind testing done and found memory leak in test_assign1_1.c
+I added extra "free()" library function call to get rid of Memory Leak.  
+Moreover , I used "memset()" function as well to initialize buffer to NULL before passing to Storage Manager functions.
+Designed hybrid data structure doubly link list to maintain dynamic list of all files of the records maintained by Storage Manager
+Tested the code with a  list of the test cases mentioned in "Test cases" section.
+ 
+ 
+*************************
+ 
+Additional files :
+=========================
+ 
+test_assign1_2.c
+ 
+*************************
+ 
+Test cases :
+=========================
+ 
+
+Create a page file
+Open a page file
+Close a page file
+Destroy a page file
+Read a block
+Read the first block
+Read the previous block
+Read the current block
+Read the next block
+Read the last block
+Get a block position
+Write a block
+Write the current block
+Append an empty block
+Ensure capacity
+Check proper page position handling
+Null filename
+Invalid filename
+Non-existing filename
+Null file handle
+Invalid / non-existing file handle
+Memory allocation failure - with 100 GB hard coded memory size locally , worked as expected
+Closing an unopened file
+Null / invalid memPage
+Empty block
+Zero size file
+Reading from an unopened file
+Writing to an unopened file
+Read previous when current = first
+Read next when current = last
+Read fail
+Write fail
+ 
+ 
+*************************
+ 
+Problems solved :
+=========================
+ 
+1) Reading blocks from a file on disk into memory.
+2) Writing blocks from memory to a file on disk.
+3) it provides methods for creating, opening, and closing files.
+4) The storage manager has to maintain several types of information for an open file:
+   The number of total pages in the file
+   The current page position (for reading and writing)
+   The file name
+   A POSIX file descriptor
+ 
+*************************
+ 
+Problems to be solved :
+=========================
+ 
+1.       Read files into the memory already created during previous sessions.
+2.       Initial bytes should be reserved for bookkeeping information like number of pages,filesize etc
+3.       A master file with all historical metadata needs to be there to initialize Storage Manager
+
