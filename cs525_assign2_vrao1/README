@@ -1,0 +1,232 @@
+Personnel Information :
+=========================
+ 
+Names: Vinod Rao
+   	Joshua D. LarBorde
+CWID : A20369838
+   	A20301009
+
+*************************
+
+
+File list:
+=========================
+
+buffer_mgr.c
+buffer_mgr.h
+buffer_mgr_stat.c
+buffer_mgr_stat.h
+deberror.c
+dberror.h
+dt.h
+Makefile
+README
+storage_mgr.c
+storage_mgr.h
+test_assign2_1.c
+test_helper.h
+
+*************************
+
+
+Milestone :
+=========================
+
+Buffer Manager has been created implementing FIFO and LRU.
+
+*************************
+
+
+Installation instruction :
+=========================
+ 
+unzip cs525_assign2_vrao1.zip
+ 
+cd cs525_assign2_vrao1
+make clean
+make
+./test_assign2
+
+*************************
+
+ 
+Function descriptions :
+=========================
+
+/*******************************************************************************
+ * Function Name: push
+ *
+ * Description: Add a page frame index to the vacant frame stack of a buffer
+ *      pool.
+ *
+ * Patameters:
+ *      BM_BufferPool *bm - Buffer pool who's vacant frame stack is updated.
+ *		int i - Index of a page frame to add.
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_STACK_FULL
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-28      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *
+*******************************************************************************/
+
+/*******************************************************************************
+ * Function Name: pop
+ *
+ * Description: Get a page frame index from the vacant frame stack of a buffer
+ *      pool.
+ *
+ * Patameters:
+ *      BM_BufferPool *bm - Buffer pool who's vacant frame stack is accessed.
+ *		int *i - Index of the page frame to get.
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_STACK_EMPTY
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-28      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *
+*******************************************************************************/
+
+/*******************************************************************************
+ * Function Name: RS_Policy
+ *
+ * Description: Handles replacement strategy management functionality.
+ * 		FIND_VICTIM_PAGE - Handles evicting a page from a frame.
+ *		INSERT_PAGE - Handles loading a page into a frame.
+ *		UPDATE_USAGE - Handles tracking recent usage.
+ *		DESTRY_QUEUE - Resets management.
+ *
+ * Patameters:
+ *      	List_Node **front - Front node of a buffer pool.
+ *		List_Node **rear - Rear node of a buffer pool.
+ *		BM_PageFrame **victim - Page frame being evicted.
+ *		BM_PageFrame **pagePresenceRegister - Precense Register for file pages.
+ *		unsigned int whatToDo - Indicates which manaement action to perform.
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_NO_FRONT_END
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-02-28      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-03-01      Joshua LaBorde <jlaborde@iit.edu>       Updates for LRU
+ *      2016-03-04      Joshua LaBorde <jlaborde@iit.edu>       Updates for changes
+ *      2016-03-04      Vinod Rao <vrao1@hawk.iit.edu>          Updates while testing
+ *
+*******************************************************************************/
+
+*************************
+
+ 
+Additional error codes :
+=========================
+
+#define RC_NULL_ARGUMENT 400
+#define RC_DYNAMIC_MEM_ALLOC_FAILED 401
+#define RC_FILE_OPEN_FAILED 402
+#define RC_UNOPENED_FILE 403
+#define RC_FILE_DESTROY_FAILED 404
+#define RC_NO_CURRENT_BLOCK 405
+#define RC_FILE_DESCRIPTOR_INIT_FAILED 406
+#define RC_FILE_READ_FAILED 407
+#define RC_INVALID_PAGE_NUM 408
+#define RC_NO_PREVIOUS_BLOCK 409
+#define RC_NO_NEXT_BLOCK 410
+#define RC_TOTAL_PAGE_CAPACITY_EXCEEDED 411
+#define RC_STRATEGY_NOT_EXIST 412
+#define RC_UNABLE_TO_PIN 413
+#define RC_UNABLE_TO_UNPIN 414
+#define RC_UNABLE_TO_SHUTDOWN 415
+#define RC_UNABLE_TO_FORCEPAGE 416
+#define RC_UNABLE_TO_FLUSH_POOL 417
+#define RC_NO_FRONT_END 418
+#define RC_STACK_FULL 419
+#define RC_STACK_EMPTY 420
+
+*************************
+
+
+Data structure :
+=========================
+ 
+// Structure for List 
+struct _fifoNode{
+	BM_PageFrame *addr;
+	struct _fifoNode *next;
+	struct _fifoNode *prev;
+};
+
+// Page Frame Structure Definition
+typedef struct _PageFrame{
+	List_Node *id;
+  	PageNumber pageNum;
+	unsigned short FixCount;
+	bool dirtyFlag;
+	char data[PAGE_SIZE];
+}BM_PageFrame;
+
+// Virtual Function for page replacement can be assigned to either FIFO,LRU etc
+typedef RC (*PageReplacementAlgo)(List_Node **,List_Node **,BM_PageFrame **,BM_PageFrame ** ,unsigned int);
+
+// mgmtData structure to store Bookkeeping information of particular Buffer Pool
+typedef struct _bufferPoolInfo{
+	PageReplacementAlgo policy;
+	List_Node *front, *rear;
+	BM_PageFrame **pagePresenceRegister;
+	BM_PageFrame *pagePool;
+	unsigned int *vacantFrameStack;
+	unsigned int top;
+	unsigned int poolSize;
+	unsigned int currentPageCount;
+	unsigned int readIO;
+	unsigned int writeIO;
+} BufferPoolInfo;
+
+// Buffer Pool Structure
+typedef struct BM_BufferPool {
+  char *pageFile;
+  int numPages;
+  ReplacementStrategy strategy;
+  BufferPoolInfo *mgmtData; // use this one to store the bookkeeping info your buffer
+                  // manager needs for a buffer pool
+} BM_BufferPool;
+
+*************************
+
+ 
+Problems solved :
+=========================
+
+1) Implemented a buffer manager that manages a fixed number of page frames in memory.
+2) It can handle more than one open buffer pool.
+3) Implemented FIFO and LRU as replacement strategies.
+4) It manages reading pages from disk into a buffor pool page frame.
+5) It provides pages to clients.
+6) It manages page usage through fix count incrementing for each pinned page.
+7) It tracks page modification.
+8) It handles wrtiting modified pages back to disk.
+
+*************************
+
+ 
+Problems to be solved :
+=========================
+
+1) Implement additional replacement strategies.
+2) Make the buffer manager thread-safe.
