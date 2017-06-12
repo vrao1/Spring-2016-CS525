@@ -1,0 +1,12 @@
+Sample Input Files :
+
+file1 
+file2
+
+Compile Instruction:
+
+gcc hw1.c
+
+Running Instruction :
+
+./a.out INPUT_FILE_1 INPUT_FILE_2
