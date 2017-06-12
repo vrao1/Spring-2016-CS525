@@ -1,0 +1,165 @@
+Personnel Information :
+=========================
+ 
+Names: Vinod Rao
+   	Joshua D. LarBorde
+CWID : A20369838
+   	A20301009
+
+*************************
+
+
+File list:
+=========================
+
+Makefile
+buffer_mgr.h
+buffer_mgr.c
+buffer_mgr_stat.c
+buffer_mgr_stat.h
+dberror.c
+dberror.h
+dt.h
+expr.c
+expr.h
+record_mgr.h
+record_mgr.c
+rm_serializer.c
+storage_mgr.h
+storage_mgr.c
+tables.h
+test_assign3_1.c
+test_expr.c
+test_helper.h
+
+*************************
+
+
+Milestone :
+=========================
+
+Record Manager has been created. 
+
+*************************
+
+
+Installation instruction :
+=========================
+ 
+unzip cs525_assign3_vrao1.zip
+ 
+cd cs525_assign3_vrao1/assign3
+make clean
+make all
+./test_assign3
+./test_expr
+
+*************************
+
+ 
+Function descriptions :
+=========================
+/*******************************************************************************
+ * Function Name: readSchema
+ *
+ * Description: Reading Schema into data stream
+ *
+ * Patameters:
+ * 		Schema **schema - Double Pointer to Schema Data Type
+ * 		char *data - Data Stream Array
+ *
+ * Return: RC - Return Code
+ *      RC_OK
+ *      RC_NULL_ARGUMENT
+ *		RC_DYNAMIC_MEM_ALLOC_FAILED
+ *
+ * Author: Vinod Rao <vrao1@hawk.iit.edu>
+ *
+ * History:
+ *      Date            Name                                    Content
+ *      ----------      ------------------------------          -----------------
+ *      2016-03-10      Vinod Rao <vrao1@hawk.iit.edu>          Initial Draft
+ *      2016-03-24      Vinod Rao <vrao1@hawk.iit.edu>          Updates while Testing
+ *
+*******************************************************************************/
+
+*************************
+
+ 
+Additional error codes :
+=========================
+#define RC_PAGE_CREATION_FAILED 421
+#define RC_BUFFER_INIT_FAILED 422
+#define RC_MARK_DIRTY_FAILED 423
+#define RC_SHUTDOWN_BUFFER_FAILED 424
+#define RC_UNABLE_TO_READ_PAGE_HANDLE 425
+#define RC_RECORD_DELETED 426
+#define RC_UNABLE_TO_OPEN_TABLE 427
+#define RC_UNABLE_TO_GET_RECORD 428
+#define RC_UNABLE_TO_GET_ATTRIBUTE 429
+#define RC_UNABLE_TO_CLOSE_TABLE 430
+
+*************************
+
+
+Data structure :
+=========================
+
+// Management Information to be assigned to mgmtData of RM_TableData
+typedef struct TableDataMgmt{
+        BM_BufferPool *bm;
+        RID nextVacancy;
+        BM_PageHandle *pgHandl;
+        int headerLen;
+}TableDataMgmt;
+
+// TableData: Management Structure for a Record Manager to handle one relation
+typedef struct RM_TableData
+{
+  char *name;
+  Schema *schema;
+  TableDataMgmt *mgmtData;
+} RM_TableData;
+ 
+
+// ScanDataMgmt Structure to contain scan management information
+typedef struct ScanDataMgmt{
+  Expr *cond;
+  RID lastRecReturned;
+  RID lastValidRec;
+} ScanDataMgmt;
+
+typedef struct RM_ScanHandle
+{
+  RM_TableData *rel;
+  ScanDataMgmt *mgmtData;
+} RM_ScanHandle;
+
+*************************
+
+ 
+Problems solved :
+=========================
+
+1) Implemented a record manager that manages a fixed size Records to read/write from/to page.
+2) It can handle more than one open tables.
+3) Read Page to get records
+4) Write Page to insert records
+5) Delete records stored in pages
+6) Insert new records in pages
+7) Update existing records in pages
+8) It retrieves all records from pages based on  specified query condition
+9) It scans through records stored on pages.
+10) It facilitates for nested query conditions too.
+
+*************************
+
+ 
+Problems to be solved :
+=========================
+
+1) Implement TIDs and tombstones.
+2) Design Interactive interface.
+3) Implement Ordered scans.
+4) Implement Checking primary key constraints.
+5) Implement Null values.
