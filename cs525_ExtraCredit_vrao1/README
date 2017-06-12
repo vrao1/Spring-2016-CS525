@@ -1,0 +1,7 @@
+Installation Instruction :
+
+Unzip the file cs525_ExtraCredit_vrao1.zip
+cd cs525_ExtraCredit_vrao1
+make clean
+make
+java SQLManager test.csv
